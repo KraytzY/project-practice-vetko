@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_CoffeeOrder" targetNamespace="http://example.com/coffee-order">
+  <bpmn:process id="Process_Coffee_Order" name="Обработать заказ клиента в кофейне Арома" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_ClientArrived" name="Клиент пришёл" />
+    <bpmn:task id="Task_SelectItem" name="Выбрать напиток и десерт" />
+    <bpmn:subProcess id="SubProcess_Payment" name="Принять оплату" />
+    <bpmn:task id="Task_TakeOrder" name="Принять заказ" />
+    <bpmn:exclusiveGateway id="Gateway_Payment" name="Оплата прошла?" />
+    <bpmn:task id="Task_Cancel" name="Сообщить об отмене" />
+    <bpmn:endEvent id="EndEvent_Canceled" name="Заказ отменён" />
+    <bpmn:subProcess id="SubProcess_PrepareOrder" name="Приготовить заказ" />
+    <bpmn:task id="Task_GiveOrder" name="Передать готовый заказ" />
+    <bpmn:task id="Task_GetOrder" name="Получить заказ" />
+    <bpmn:endEvent id="EndEvent_Completed" name="Заказ получен" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_ClientArrived" targetRef="Task_SelectItem" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_SelectItem" targetRef="SubProcess_Payment" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="SubProcess_Payment" targetRef="Task_TakeOrder" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_TakeOrder" targetRef="Gateway_Payment" />
+    <bpmn:sequenceFlow id="Flow_5" name="нет" sourceRef="Gateway_Payment" targetRef="Task_Cancel" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Cancel" targetRef="EndEvent_Canceled" />
+    <bpmn:sequenceFlow id="Flow_7" name="да" sourceRef="Gateway_Payment" targetRef="SubProcess_PrepareOrder" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="SubProcess_PrepareOrder" targetRef="Task_GiveOrder" />
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="Task_GiveOrder" targetRef="Task_GetOrder" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_GetOrder" targetRef="EndEvent_Completed" />
+  </bpmn:process>
+</bpmn:definitions>
